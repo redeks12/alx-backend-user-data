@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """0x00. Personal data"""
 import re
+from os import environ
 from typing import List
+
+from mysql.connector.connection import MySQLConnection
 
 
 def filter_datum(
@@ -29,6 +32,18 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
     logger.propagate = False
     return logger
+
+
+def get_db() -> MySQLConnection:
+    """connect to database"""
+    host = environ.get("PERSONAL_DATA_DB_HOST")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD")
+    username = environ.get("PERSONAL_DATA_DB_USERNAME")
+    name = environ.get("PERSONAL_DATA_DB_NAME")
+    cursor = MySQLConnection(
+        host=host, username=username, password=password, database=name
+    )
+    return cursor
 
 
 class RedactingFormatter(logging.Formatter):
