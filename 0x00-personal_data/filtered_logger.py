@@ -40,9 +40,7 @@ def get_db() -> MySQLConnection:
     password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     name = environ.get("PERSONAL_DATA_DB_NAME")
-    cursor = MySQLConnection(
-        host=host, username=username, password=password, database=name
-    )
+    cursor = MySQLConnection(host=host, user=username, password=password, database=name)
     return cursor
 
 
