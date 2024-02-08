@@ -17,7 +17,7 @@ def filter_datum(
 
 import logging
 
-PII_FIELDS = ("name", "email", "phone", "ip", "ssn")
+PII_FIELDS = ("name", "email", "phone", "password", "ssn")
 
 
 def get_logger() -> logging.Logger:
