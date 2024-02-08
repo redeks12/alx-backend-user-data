@@ -25,12 +25,13 @@ PII_FIELDS = ("name", "email", "phone", "password", "ssn")
 
 def get_logger() -> logging.Logger:
     """Implement a get_logger function that takes no arguments and returns a logging.Logger object."""
-    logger = logging.Logger("user_data", level=logging.INFO)
+    logger = logging.getLogger("user_data")
     handler = logging.StreamHandler()
     formatter = RedactingFormatter(list(PII_FIELDS))
     handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
     logger.propagate = False
+    logger.addHandler(handler)
     return logger
 
 
@@ -40,7 +41,9 @@ def get_db() -> MySQLConnection:
     password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
     username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     name = environ.get("PERSONAL_DATA_DB_NAME")
-    cursor = MySQLConnection(host=host, user=username, password=password, database=name)
+    cursor = MySQLConnection(
+        host=host, user=username, port=3306, password=password, database=name
+    )
     return cursor
 
 
