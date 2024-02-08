@@ -27,7 +27,7 @@ def get_logger() -> logging.Logger:
     """Implement a get_logger function that takes no arguments and returns a logging.Logger object."""
     logger = logging.Logger("user_data", level=logging.INFO)
     handler = logging.StreamHandler()
-    formatter = RedactingFormatter()
+    formatter = RedactingFormatter(list(PII_FIELDS))
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.propagate = False
@@ -36,9 +36,9 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> MySQLConnection:
     """connect to database"""
-    host = environ.get("PERSONAL_DATA_DB_HOST")
-    password = environ.get("PERSONAL_DATA_DB_PASSWORD")
-    username = environ.get("PERSONAL_DATA_DB_USERNAME")
+    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
     name = environ.get("PERSONAL_DATA_DB_NAME")
     cursor = MySQLConnection(
         host=host, username=username, password=password, database=name
