@@ -17,6 +17,19 @@ def filter_datum(
 
 import logging
 
+PII_FIELDS = ("name", "email", "phone", "ip", "ssn")
+
+
+def get_logger() -> logging.Logger:
+    """Implement a get_logger function that takes no arguments and returns a logging.Logger object."""
+    logger = logging.Logger("user_data", level=logging.INFO)
+    handler = logging.StreamHandler()
+    formatter = RedactingFormatter()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
+    return logger
+
 
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class"""
