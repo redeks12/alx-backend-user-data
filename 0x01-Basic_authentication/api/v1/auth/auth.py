@@ -4,8 +4,6 @@ Route module for Auth
 """
 from typing import List, TypeVar
 
-from flask import request
-
 
 class Auth:
     """auth class for authentication"""
