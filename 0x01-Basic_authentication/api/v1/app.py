@@ -21,7 +21,8 @@ if auth:
 
 
 @app.before_request
-def before_request():
+def before_request() -> None:
+    """before_request method"""
     if auth is None:
         return
     if not auth.require_auth(
