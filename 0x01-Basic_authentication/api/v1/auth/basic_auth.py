@@ -6,4 +6,6 @@ import auth
 
 
 class BasicAuth(auth.Auth):
+    """Basic authentication implementation"""
+
     pass
