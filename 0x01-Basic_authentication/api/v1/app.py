@@ -2,24 +2,25 @@
 """
 Route module for the API
 """
-from os import getenv
-from api.v1.views import app_views
-from flask import Flask, jsonify, abort, request
-from flask_cors import CORS, cross_origin
 import os
+from os import getenv
 
+from api.v1.auth.auth import Auth
+from api.v1.auth.basic_auth import BasicAuth
+from api.v1.views import app_views
+from flask import Flask, abort, jsonify, request
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-auth = os.getenv("AUTH_TYPE", None)
-if auth and auth == "basic_auth":
-    from api.v1.auth.basic_auth import BasicAuth
+auths = os.getenv("AUTH_TYPE", None)
+if auths == "basic_auth":
+    # from api.v1.auth.basic_auth import BasicAuth
 
-    auth = BasicAuth
-elif auth:
-    from api.v1.auth.auth import Auth
+    auth = BasicAuth()
+else:
 
     auth = Auth()
 
@@ -30,9 +31,11 @@ def before_request() -> None:
     if auth is None:
         return
     if not auth.require_auth(
-        request.path, ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"]
+        request.path,
+        ["/api/v1/status/", "/api/v1/unauthorized/", "/api/v1/forbidden/"],
     ):
         return
+
     if auth.authorization_header(request) is None:
         abort(401)
     if auth.current_user(request) is None:
@@ -60,4 +63,4 @@ def forbid(error) -> str:
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
