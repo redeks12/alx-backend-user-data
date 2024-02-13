@@ -2,10 +2,8 @@
 """
 Route module for Basic Auth
 """
-import auth
+from .auth import Auth
 
 
-class BasicAuth(auth.Auth):
+class BasicAuth(Auth):
     """Basic authentication implementation"""
-
-    pass
