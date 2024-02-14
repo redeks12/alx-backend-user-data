@@ -3,6 +3,7 @@
 Route module for Auth
 """
 from typing import List, TypeVar
+from os import getenv
 
 
 class Auth:
@@ -44,3 +45,8 @@ class Auth:
         """get current user
         - return None"""
         return None
+
+    def session_cookie(self, request=None):
+        """get session cookie from request"""
+        cookie_name = getenv("SESSION_NAME")
+        return request.cookies.get(cookie_name)
