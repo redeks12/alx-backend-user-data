@@ -7,6 +7,7 @@ from os import getenv
 
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
+from api.v1.auth.session_auth import SessionAuth
 from api.v1.views import app_views
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS, cross_origin
@@ -20,6 +21,9 @@ if auths == "basic_auth":
     # from api.v1.auth.basic_auth import BasicAuth
 
     auth = BasicAuth()
+elif auths == "session_auth":
+
+    auth = SessionAuth()
 else:
 
     auth = Auth()
