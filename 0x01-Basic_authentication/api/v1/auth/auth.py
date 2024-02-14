@@ -18,11 +18,11 @@ class Auth:
         if path.endswith("/") or path.endswith("*"):
             path = path[:-1]
         for idx, ex in enumerate(excluded_paths):
-            if ex.endswith("/"):
+            if ex.endswith("/") or ex.endswith("*"):
                 excluded_paths[idx] = ex[:-1]
 
         for pth in excluded_paths:
-            if path in pth:
+            if pth in path:
                 return False
 
         return True
