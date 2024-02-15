@@ -4,11 +4,11 @@ Route module for Basic Auth
 """
 import base64
 from typing import Tuple, TypeVar
+from uuid import uuid4
 
 from models.user import User
 
 from .auth import Auth
-from uuid import uuid4
 
 
 class SessionAuth(Auth):
@@ -33,3 +33,15 @@ class SessionAuth(Auth):
             return None
 
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """retrieve current user information"""
+        if request is None:
+            return None
+        val = self.session_cookie(request)
+
+        if val is not None:
+            id = self.user_id_for_session_id(val)
+            user = User.get(id)
+
+            return user
