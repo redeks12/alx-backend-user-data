@@ -34,7 +34,20 @@ def auth_login():
     session_id = auth.create_session(user[0].id)
     session_name = getenv("SESSION_NAME")
     auth.session_cookie(request)
-    # request.cookies.update(session_name, session_id)
     ret_sta = jsonify(user[0].to_json())
     ret_sta.set_cookie(session_name, session_id)
     return ret_sta
+
+
+@app_views.route("/auth_session/logout/", methods=["DELETE"])
+@app_views.route("/auth_session/logout", methods=["DELETE"])
+def auth_logout():
+    """handle logout request from flask"""
+
+    from api.v1.app import auth
+
+    destroyed_sess = auth.destroy_session(request)
+    if destroyed_sess:
+        return jsonify({}), 200
+
+    abort(404)
