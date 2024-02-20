@@ -27,7 +27,16 @@ def reg_users():
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
     else:
-        return jsonify({"email": f"{user.email}", "message": "user created"}), 200
+        return (
+            jsonify(
+                {
+                    "email": f"{user.email}",
+                    "message": "user\
+            created",
+                }
+            ),
+            200,
+        )
 
 
 @app.route("/sessions", methods=["POST"])

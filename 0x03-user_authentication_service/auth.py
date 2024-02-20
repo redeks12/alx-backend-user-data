@@ -4,6 +4,9 @@ from typing import Union
 from uuid import uuid4
 
 from bcrypt import checkpw, gensalt, hashpw
+from db import DB
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from user import User
 
 
@@ -18,9 +21,6 @@ def _generate_uuid() -> str:
     return str(uuid4())
 
 
-from db import DB
-
-
 class Auth:
     """Auth class to interact with the authentication database."""
 
@@ -31,7 +31,7 @@ class Auth:
         """Register user with the given email and password"""
         try:
             user = self._db.find_user_by(email=email)
-        except:
+        except (NoResultFound, InvalidRequestError):
             hashed = _hash_password(password)
             user = self._db.add_user(email=email, hashed_password=hashed)
             return user
@@ -43,7 +43,7 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             return checkpw(password.encode(), user.hashed_password)
-        except:
+        except (NoResultFound, InvalidRequestError):
             return False
 
     def create_session(self, email: str) -> str:
@@ -54,7 +54,7 @@ class Auth:
             setattr(user, "session_id", uid)
             self._db.save()
             return uid
-        except:
+        except (NoResultFound, InvalidRequestError):
             pass
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
@@ -65,7 +65,7 @@ class Auth:
         try:
             user = self._db.find_user_by(session_id=session_id)
             return user
-        except:
+        except (NoResultFound, InvalidRequestError):
             return None
 
     def destroy_session(self, user_id: int) -> None:
@@ -77,5 +77,5 @@ class Auth:
                 if hasattr(user, "session_id"):
                     setattr(user, "session_id", None)
                     return None
-        except:
+        except (NoResultFound, InvalidRequestError):
             pass
