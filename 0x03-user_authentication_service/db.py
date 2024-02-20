@@ -43,7 +43,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, *args, **kwargs: Dict[str, str]) -> User:
+    def find_user_by(self, *args, **kwargs) -> User:
         """return a user matching the given arguments"""
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
