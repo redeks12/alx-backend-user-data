@@ -65,7 +65,6 @@ def profile():
     if sess_id is None:
         abort(403)
     user = AUTH.get_user_from_session_id(sess_id)
-    print(user)
     if user:
         ret = jsonify({"email": user.email})
         ret.set_cookie("session_id", sess_id)
