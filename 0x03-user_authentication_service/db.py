@@ -11,6 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import Base, User
+from typing import Dict
 
 logging.disable(logging.WARNING)
 
@@ -42,7 +43,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, *args, **kwargs) -> User:
+    def find_user_by(self, *args, **kwargs: Dict[str, str]) -> User:
         """return a user matching the given arguments"""
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
