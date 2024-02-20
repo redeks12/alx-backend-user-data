@@ -23,8 +23,8 @@ class User(Base):
         resets.
     """
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(128), nullable=False)
-    hashed_password = Column(String(128), nullable=False)
-    session_id = Column(String(128), nullable=True)
-    reset_token = Column(String(128), nullable=True)
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    email = Column("email", String(128), nullable=False)
+    hashed_password = Column("hashed_password", String(128), nullable=False)
+    session_id = Column("session_id", String(128), nullable=True)
+    reset_token = Column("reset_token", String(128), nullable=True)
