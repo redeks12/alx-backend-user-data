@@ -3,12 +3,16 @@
 
 """DB module
 """
+import logging
+
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError, NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import NoResultFound, InvalidRequestError
 from sqlalchemy.orm.session import Session
 from user import Base, User
+
+logging.disable(logging.WARNING)
 
 
 class DB:
@@ -40,7 +44,10 @@ class DB:
 
     def find_user_by(self, *args, **kwargs) -> User:
         """return a user matching the given arguments"""
-        user = self._session.query(User).filter_by(**kwargs).first()
-        if not user:
-            raise NoResultFound
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+        except NoResultFound:
+            raise NoResultFound()
+        except InvalidRequestError:
+            raise InvalidRequestError()
         return user
