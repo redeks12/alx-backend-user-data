@@ -63,3 +63,7 @@ class DB:
                     setattr(user, key, value)
                 else:
                     raise ValueError()
+
+    def save(self):
+        """comit the current session"""
+        self._session.commit()
