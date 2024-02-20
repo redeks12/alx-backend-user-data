@@ -6,13 +6,13 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", methods=["GET"], strict_slashes=False)
 def hello():
     """default route"""
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route("/users", methods=["POST"])
+@app.route("/users", methods=["POST"], strict_slashes=False)
 def reg_users():
     """register users"""
     from auth import Auth
