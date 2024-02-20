@@ -45,7 +45,7 @@ def login():
     return ret
 
 
-@app.route("/logout", methods=["DELETE"])
+@app.route("/sessions", methods=["DELETE"])
 def logout():
     """logout from the admin"""
     sess_id = request.cookies.get("session_id")
