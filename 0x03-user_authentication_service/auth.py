@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """0x03. User authentication service"""
+from typing import Union
 from uuid import uuid4
 
 from bcrypt import checkpw, gensalt, hashpw
@@ -53,5 +54,28 @@ class Auth:
             setattr(user, "session_id", uid)
             self._db.save()
             return uid
+        except:
+            pass
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """get_user_from_session_ id of user"""
+
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except:
+            return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """delete a session"""
+
+        try:
+            user = self._db.find_user_by(id=user_id)
+            if user:
+                if hasattr(user, "session_id"):
+                    setattr(user, "session_id", None)
+                    return None
         except:
             pass

@@ -10,5 +10,9 @@ auth = Auth()
 
 auth.register_user(email, password)
 
-print(auth.create_session(email))
-print(auth.create_session("unknown@email.com"))
+sess = auth.create_session(email)
+print(sess)
+print(auth.destroy_session(1))
+print(auth.get_user_from_session_id(sess))
+
+# print(auth)
