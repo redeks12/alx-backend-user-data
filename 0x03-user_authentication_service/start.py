@@ -10,7 +10,7 @@ password = "mySecuredPwd"
 auth = Auth()
 
 try:
-    user = auth.register_user(email, password)
+    user = auth.register_user(email, 766677)
     print("successfully created a new user!")
 except ValueError as err:
     print("could not create a new user: {}".format(err))
