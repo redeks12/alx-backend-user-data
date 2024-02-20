@@ -2,7 +2,7 @@
 """0x03. User authentication service"""
 
 from auth import Auth
-from flask import Flask, jsonify, request, abort
+from flask import Flask, abort, jsonify, redirect, request
 
 AUTH = Auth()
 
@@ -45,5 +45,33 @@ def login():
     return ret
 
 
+@app.route("/logout", methods=["DELETE"])
+def logout():
+    """logout from the admin"""
+    sess_id = request.cookies.get("session_id")
+
+    user = AUTH.get_user_from_session_id(sess_id)
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect("hello")
+
+    return jsonify({"error": "user not found"}), 403
+
+
+@app.route("/profile", methods=["GET"])
+def profile():
+    """return profile information"""
+    sess_id = request.cookies.get("session_id")
+    if sess_id is None:
+        abort(403)
+    user = AUTH.get_user_from_session_id(sess_id)
+    print(user)
+    if user:
+        ret = jsonify({"email": user.email})
+        ret.set_cookie("session_id", sess_id)
+        return ret, 200
+    abort(403)
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port="5000", debug=True)
