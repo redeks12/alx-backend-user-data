@@ -79,3 +79,21 @@ class Auth:
                     return None
         except (NoResultFound, InvalidRequestError):
             pass
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Returns the reset password token"""
+        try:
+            user = self._db.find_user_by(email=email)
+            uid = _generate_uuid()
+            setattr(user, "reset_token", uid)
+            self._db.save()
+            return uid
+        except (NoResultFound, InvalidRequestError):
+            raise ValueError()
+
+    def get_single(self, email: str) -> Union[User, None]:
+        try:
+            return self._db.find_user_by(email=email)
+
+        except (NoResultFound, InvalidRequestError):
+            return None
