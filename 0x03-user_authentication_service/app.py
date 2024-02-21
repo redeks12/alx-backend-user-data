@@ -31,7 +31,7 @@ def reg_users():
             jsonify(
                 {
                     "email": f"{user.email}",
-                    "message": "user\
+                    "message": "user \
             created",
                 }
             ),
