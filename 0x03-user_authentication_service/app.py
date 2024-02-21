@@ -21,7 +21,6 @@ def reg_users():
 
     email = request.form.get("email")
     password = request.form.get("password")
-
     try:
         user = AUTH.register_user(email=email, password=password)
     except ValueError:
@@ -32,7 +31,7 @@ def reg_users():
                 {
                     "email": f"{user.email}",
                     "message": "user \
-            created",
+created",
                 }
             ),
             200,
