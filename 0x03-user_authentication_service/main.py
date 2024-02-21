@@ -7,20 +7,23 @@ URL = "http://localhost:5000"
 
 def register_user(email: str, password: str) -> None:
     """Register new user"""
-    req = requests.post(f"{URL}/users", data={"email": email, "password": password})
+    data = {"email": email, "password": password}
+    req = requests.post(f"{URL}/users", data=data)
     req.raise_for_status()
     assert req.status_code == 200
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
     """log in with wrong password"""
-    req = requests.post(f"{URL}/sessions", data={"email": email, "password": password})
+    data = {"email": email, "password": password}
+    req = requests.post(f"{URL}/sessions", data=data)
     assert req.status_code == 401
 
 
 def log_in(email: str, password: str) -> str:
     """login with email and password"""
-    req = requests.post(f"{URL}/sessions", data={"email": email, "password": password})
+    data = {"email": email, "password": password}
+    req = requests.post(f"{URL}/sessions", data=data)
     assert req.status_code == 200
     return req.cookies.get("session_id")
 
@@ -33,13 +36,15 @@ def profile_unlogged() -> None:
 
 def profile_logged(session_id: str) -> None:
     """login with email and password"""
-    req = requests.get(f"{URL}/profile", cookies={"session_id": session_id})
+    cookies = {"session_id": session_id}
+    req = requests.get(f"{URL}/profile", cookies=cookies)
     assert req.status_code == 200
 
 
 def log_out(session_id: str) -> None:
     """login with email and password"""
-    req = requests.delete(f"{URL}/sessions", cookies={"session_id": session_id})
+    cookies = {"session_id": session_id}
+    req = requests.delete(f"{URL}/sessions", cookies=cookies)
 
     assert req.status_code == 302
 
@@ -54,9 +59,11 @@ def reset_password_token(email: str) -> str:
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
     """update password for user"""
+    n = new_password
+    d = {"email": email, "reset_token": reset_token, "new_password": n}
     req = requests.put(
         f"{URL}/reset_password",
-        data={"email": email, "reset_token": reset_token, "new_password": new_password},
+        data=d,
     )
     assert req.status_code == 200
 
