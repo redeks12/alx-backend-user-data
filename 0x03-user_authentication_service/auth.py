@@ -91,9 +91,13 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             raise ValueError()
 
-    def get_single(self, email: str) -> Union[User, None]:
+    def update_password(self, reset_token: str, password: str) -> None:
+        """update password from password"""
         try:
-            return self._db.find_user_by(email=email)
-
+            user = self._db.find_user_by(reset_token=reset_token)
+            hashed = _hash_password(password)
+            setattr(user, "hashed_password", hashed)
+            setattr(user, "reset_token", None)
+            self._db.save()
         except (NoResultFound, InvalidRequestError):
-            return None
+            raise ValueError()
